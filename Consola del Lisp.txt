@@ -1,0 +1,71 @@
+En Lisp primero se escribe el operador y luego los argumentos.
+Y cada función se tiene que escribir entre paréntesis antes de ejecutarla.
+
+Por ejemplo:
+(Operador Argumento1 Argumento2)
+Que se escribe: (+ 4 6)
+Que sumaría 4 + 6
+
+(Operador (Operador2 Argumento))
+Que se escribe: ((cos 0)
+
+cons 		es para crear una lista.
+consp 		comprueba si hay elementos en una lista
+null 		comprueba si está vacía
+nth Argumento	Devuelve el elemento con ese índice. Por ejemplo "nth 0" devuelve el primer elemento
+member		Comprueba si hay un elemento en una lista
+
+(member 'b '(hola))	Devuelve "NIL" porque no hay "b" en "hola"
+(member 'y '(y hola))	Devuelve "Y HOLA" porque es lo que sigue de "Y" en "y hola"
+
+
+
+Esta función cuenta de forma recursiva, es decir, recibe una lista "L" y cuando la recive
+comprueba si está vacía, si está vacía 
+
+
+(defun recursive-list-length (L)
+  (if (null L)
+      0
+      (1+ (recursive-list-length (rest L)))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Esta función cuenta de forma recursiva, es decir
+
+
+
+
+(defun recursive-list-length (L)
+  (if (null L)
+      0
+      (1+ (recursive-list-length (rest L)))))

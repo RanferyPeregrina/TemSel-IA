@@ -1,0 +1,31 @@
+Los atomos
+	Son Strings
+	Están entre comillas
+
+Las vaiables
+	Empiezan con mayúscula
+	Empiezan con guión bajo
+	Las moléculas son términos complejos
+	Porque se construyen con átomos
+
+
+Unificación
+Tienen la misma aridad
+Sus argumentos pueden ser unificados
+Las variables deben ser compatibles
+Una variable sí se puede unificar con un átomo
+Para llamar a la unificación 
+
+
+
+La aridad es la canitdad de átomos que tiene un átomo
+hola(as, sa) Aridad 2
+
+Si llamo un predicado con más de un átomo lo tengo que llamar con diagonales
+gusta(vincent, mia)
+
+
+
+Prolog: 2013 Logic Programming With Prolog
+Capítulo 12
+Nos toca con Francés

@@ -1,0 +1,59 @@
+Prolog es un lenguaje lógica.
+Descriptivos
+Lógicos
+Fu-ncionales
+E-tadísticos
+Orientados a objetos
+
+Los lógicos se hicieron para comprobar los sistmeas condicionales para emular el pensamiento humano.
+Prolog utiliza constructores lógicos para relacionar ideas.
+
+Para hacer relaciones entre un "Algo" y un "Hacer" se usan 2 "Átomos"
+"Quién" y "Qué"
+
+Prolog necesita "Hechos" y "Reglas".
+Algo usando un verbo de movimiento
+Reglas de quién puede utilizarlo.
+	Por ejemplo las licuadoras NO pueden salir coreindo
+
+Hechos y reglas construyen bases de conocimiento.
+Una base de conocimientos es el universo que existe para ese ssitema
+
+Si no está declarada la base de conocimietos no eciste.
+En la base de conocimientos se pueden hacer búsquedas.
+
+A partir de cosas que so n evidentes, encontrar cosas que no lo son.
+Lo más básico que se puede hacer en Prolog son sistemas de pensamiento deductivo.
+
+mujer(ana)
+mujer(juany)
+mujer(yolanda)
+tocarguitarra(juany)
+fiesta				%Este es un predicado
+	De aquí entendemos que por ejemplo, juany es mujer.
+					juany toca la guitarra
+
+
+(escuchamusica(yolanda) - feliz(yolanda) %Esto es una consecuencia.
+			%Osea que Yolanda es feliz porque escucha música.
+
+Las variables se esciben con mayúsculas
+? - mujer(X) 	%Es una pregunta sobre si X es mujer
+		%Pero si hay 3 mujeres, tengo que hacer esa consulta 3 veces para que me muestre todas
+ 
+
+gusta(vicente, ana)
+gusta(marsellus, ana)
+gusta(calabaza, conejodechocolate)
+gusta(conejodechocolate, calabaza)
+
+celos(X,Y):- gusta(X,Z), gusta(Y,Z)
+%Aquí estamos declarando que por ejemplo, los celos de 2 individuos existen si a 2 sujetos X, Y, les gusta la misma Z
+
+4 atomos
+2 moléculas
+1 regla
+	 	
+
+
+
