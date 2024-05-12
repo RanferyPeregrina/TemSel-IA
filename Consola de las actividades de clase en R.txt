@@ -1,0 +1,385 @@
+> a<-sets_options("universe", seq(1,100,0.5))
+> rel <- data.frame(sets = c(rep("A", 5), "B", "C"),
++                   elements = c(letters[seq_len(6)], letters[6]),
++                   fuzzy = runif(7))
+> rel
+  sets elements     fuzzy
+1    A        a 0.2779592
+2    A        b 0.7558229
+3    A        c 0.1461147
+4    A        d 0.5148468
+5    A        e 0.1468401
+6    B        f 0.9499781
+7    C        f 0.7809490
+> fuzzy_set <- tidySet(rel)
+> #Ahora hace un conjunto difuso y lo guarda en "fuzzy_set"
+> 
+> fuzzy_set
+  elements sets     fuzzy
+1        a    A 0.2779592
+2        b    A 0.7558229
+3        c    A 0.1461147
+4        d    A 0.5148468
+5        e    A 0.1468401
+6        f    B 0.9499781
+7        f    C 0.7809490
+> #LLama la función, para ver cómo nos quedó.
+> rel2 <- data.frame(sets = c(rep("A", 5), c(rep("B", 5)), c(rep("C", 5))),
++                    elements = c(letters[seq_len(5)],
++                                 letters[seq_len(5)],
++                                 letters[seq_len(5)]),
++                    fuzzy = runif(15))
+> rel2 #Imprime.
+   sets elements      fuzzy
+1     A        a 0.06222843
+2     A        b 0.56120473
+3     A        c 0.47285032
+4     A        d 0.91164473
+5     A        e 0.16788243
+6     B        a 0.05685551
+7     B        b 0.34976758
+8     B        c 0.28597995
+9     B        d 0.59792844
+10    B        e 0.45111749
+11    C        a 0.29751963
+12    C        b 0.43903000
+13    C        c 0.59558276
+14    C        d 0.22764117
+15    C        e 0.10174846
+> fuzzy_set2 <- tidySet(rel2)
+> #Crea la versión difusa de "rel2"
+> fuzzy_set2
+   elements sets      fuzzy
+1         a    A 0.06222843
+2         b    A 0.56120473
+3         c    A 0.47285032
+4         d    A 0.91164473
+5         e    A 0.16788243
+6         a    B 0.05685551
+7         b    B 0.34976758
+8         c    B 0.28597995
+9         d    B 0.59792844
+10        e    B 0.45111749
+11        a    C 0.29751963
+12        b    C 0.43903000
+13        c    C 0.59558276
+14        d    C 0.22764117
+15        e    C 0.10174846
+> BaseSet::union(fuzzy_set, sets =c("A", "B"))
+  elements sets     fuzzy
+1        a  A∪B 0.2779592
+2        b  A∪B 0.7558229
+3        c  A∪B 0.1461147
+4        d  A∪B 0.5148468
+5        e  A∪B 0.1468401
+6        f  A∪B 0.9499781
+> #Crea una unión de "fuzzy_set" entre sus conjuntos A y B.
+> #Pero A tiene 5 valores y B nomás 1 XD
+> #Entonces no lo hace. Directamente imprime algo
+> BaseSet::union(fuzzy_set, sets =c("A", "B"), name = "D")
+  elements sets     fuzzy
+1        a    D 0.2779592
+2        b    D 0.7558229
+3        c    D 0.1461147
+4        d    D 0.5148468
+5        e    D 0.1468401
+6        f    D 0.9499781
+> #Hace lo mismo pero lo guarda en un nuevo conjunto que se llama "D"
+> 
+> BaseSet::union(fuzzy_set2, sets =c("A", "B"), name = "E")
+  elements sets      fuzzy
+1        a    E 0.06222843
+2        b    E 0.56120473
+3        c    E 0.47285032
+4        d    E 0.91164473
+5        e    E 0.45111749
+> #Lo mismo pero del fuzztset2 y lo guarda en "E"
+> intersection(fuzzy_set, sets = c("B", "C"), keep = FALSE)
+  elements sets    fuzzy
+1        f  B∩C 0.780949
+> #Ahora en lugar de unión es con intersección.
+> #Lo de "FALSE" es para que no imprima el conjunto original, Que hueva.
+> 
+> intersection(fuzzy_set2, sets = c("B", "C"), keep = FALSE)
+  elements sets      fuzzy
+1        a  B∩C 0.05685551
+2        b  B∩C 0.34976758
+3        c  B∩C 0.28597995
+4        d  B∩C 0.22764117
+5        e  B∩C 0.10174846
+> #Ahora igual, pero con el conjunto difuso "fuzzy_set2".
+> complement_set(fuzzy_set, sets = "A", keep = FALSE)
+  elements sets     fuzzy
+1        a   ∁A 0.7220408
+2        b   ∁A 0.2441771
+3        c   ∁A 0.8538853
+4        d   ∁A 0.4851532
+5        e   ∁A 0.8531599
+> #Ahora el complemento del conjunto "A" del arreglo de conjuntos difusos "fuzzy_set"
+> #"fuzzy_set" es el conjunto que hicimos al principio del programa
+> #
+> rel <- data.frame(sets = c(rep("A", 5), rep("B", 5)), elements =
++                       c("1", "1.5", "2", "2.5", "3"), fuzzy = runif(10))
+> #Crea un "rel" con 3 conjuntos. De 5 valores cada uno.
+> #Como nombre a cada valor de esos conjuntos le puso de nombre "1", "1.5" etc.
+> #COMO EN LA TAREA!!
+> rel #Imprime. Ahora "rel" es otra cosa
+   sets elements     fuzzy
+1     A        1 0.5898543
+2     A      1.5 0.0472658
+3     A        2 0.7994689
+4     A      2.5 0.5199925
+5     A        3 0.6777256
+6     B        1 0.8988871
+7     B      1.5 0.8621422
+8     B        2 0.9747831
+9     B      2.5 0.6394951
+10    B        3 0.7326022
+> relfuzzy_rel <- tidySet(rel)
+> #Luego lo hace difuso
+> #Porque tiene valores que exceden el 1.
+> #Así que obviaente no era una variable difusa.
+> relfuzzy_rel
+   elements sets     fuzzy
+1         1    A 0.5898543
+2       1.5    A 0.0472658
+3         2    A 0.7994689
+4       2.5    A 0.5199925
+5         3    A 0.6777256
+6         1    B 0.8988871
+7       1.5    B 0.8621422
+8         2    B 0.9747831
+9       2.5    B 0.6394951
+10        3    B 0.7326022
+> #Me equivoqué. Los valores que excedían el 1 eran los nobres de variable.
+> #Siepre tuvo valores difusos
+> #Que vergüenza.
+> 
+> intrelcompA <- complement_set(relfuzzy_rel, sets = "A", keep = TRUE)
+> #Luego le saca complemento y por alguna razón no la imprime
+> #Si quisieras imprimirla tendrías que imprimir la variable donde guardaste ese "complemento"
+> #Osea sólo escribir su nombre. "intrelcompA".
+> 
+> intrelcompA
+   elements sets     fuzzy
+1         1    A 0.5898543
+2       1.5    A 0.0472658
+3         2    A 0.7994689
+4       2.5    A 0.5199925
+5         3    A 0.6777256
+6         1    B 0.8988871
+7       1.5    B 0.8621422
+8         2    B 0.9747831
+9       2.5    B 0.6394951
+10        3    B 0.7326022
+11        1   ∁A 0.4101457
+12      1.5   ∁A 0.9527342
+13        2   ∁A 0.2005311
+14      2.5   ∁A 0.4800075
+15        3   ∁A 0.3222744
+> 
+> urelintrel <- intersection(relfuzzy_rel, sets = c("A", "B"), keep = FALSE)
+> #Lo mismmo, pero con intersección
+> 
+> urel <- BaseSet::union(relfuzzy_rel, sets = c("A", "B"))
+> #Lo mismo pero con unión
+> 
+> relfuzzy_rel <- tidySet(rel)
+>     #Hace difusa la variable "rel"
+> 
+> urel <- BaseSet::union(relfuzzy_rel, sets = c("A", "B"))
+>     #Crea "urel" de la unión de A y B.
+> 
+> #La versión difusa de rel es:
+> relfuzzy_rel
+   elements sets     fuzzy
+1         1    A 0.5898543
+2       1.5    A 0.0472658
+3         2    A 0.7994689
+4       2.5    A 0.5199925
+5         3    A 0.6777256
+6         1    B 0.8988871
+7       1.5    B 0.8621422
+8         2    B 0.9747831
+9       2.5    B 0.6394951
+10        3    B 0.7326022
+> 
+> #La unión de los conjuntos "A" y "B" de "relfuzzy_rel" es:
+> urel
+  elements sets     fuzzy
+1        1  A∪B 0.8988871
+2      1.5  A∪B 0.8621422
+3        2  A∪B 0.9747831
+4      2.5  A∪B 0.6394951
+5        3  A∪B 0.7326022
+> #========================================================
+> #================== AHORA LA TAREA ??====================
+> #========================================================
+> conjunto_A <- data.frame(
++     sets = rep("A", 5)
++     elements = c("1", "1.5", "2", "2.5", "3")
+Error: unexpected symbol in:
+"    sets = rep("A", 5)
+    elements"
+> conjunto_A <- data.frame(
++     sets = rep("A", 5),
++     elements = c("1", "1.5", "2", "2.5", "3")
++     fuzzy = c(1, 0.75, 0.3, 0.15, 1)
+Error: unexpected symbol in:
+"    elements = c("1", "1.5", "2", "2.5", "3")
+    fuzzy"
+> conjunto_A <- data.frame(
++     sets = rep("A", 5),
++     elements = c("1", "1.5", "2", "2.5", "3"),
++     fuzzy = c(1, 0.75, 0.3, 0.15, 1)
++ )
+> conjunto_A
+  sets elements fuzzy
+1    A        1  1.00
+2    A      1.5  0.75
+3    A        2  0.30
+4    A      2.5  0.15
+5    A        3  1.00
+> 
+> conjunto_B <- data.frame(
++     sets = rep("B", 5),
++     elements = c("1", "1.5", "2", "2.5", "3"),
++     fuzzy = c(1, 0.6, 1.8, 1, 0)
++ )
+> conjunto_B
+  sets elements fuzzy
+1    B        1   1.0
+2    B      1.5   0.6
+3    B        2   1.8
+4    B      2.5   1.0
+5    B        3   0.0
+> #-----------Esos fueron los conjuntos iniciales con los que estaremos trabajando-------------
+> 
+> #Para hacer la unión entre el conjunto A y B:------------
+> Union_A_B <- BaseSet::union(conjunto_A, sets = "B")
+Error in UseMethod("union") : 
+  no applicable method for 'union' applied to an object of class "data.frame"
+> Union_A_B <- BaseSet::union(conjunto_A, sets = "B")
+Error in UseMethod("union") : 
+  no applicable method for 'union' applied to an object of class "data.frame"
+> #Oh, primero tengo que hacerlos "tidySet" para manejarlos con operadores creo.
+> 
+> # Convertir los data frames en conjuntos manejables
+> A <- tidySet(conjunto_A)
+> B <- tidySet(conjunto_B)
+Error in validObject(.Object) : 
+  invalid class “TidySet” object: fuzzy column is restricted to a number between 0 and 1.
+> #Ay, declaré mal desde el principio., el elemento "2" del conjunto B es "1.8".
+> #Voy a volver a hacer todo otra vez.
+> 
+> #========================================================
+> #================== AHORA LA TAREA ??====================
+> #========================================================
+> 
+> # Declarar conjunto A
+> conjunto_A <- data.frame(
++     conjunto = rep("A", 5),
++     elementos = c("1", "1.5", "2", "2.5", "3"),
++     grado_pertenencia = c(1, 0.75, 0.3, 0.15, 1)
++ )
+> 
+> # Declarar conjunto B
+> conjunto_B <- data.frame(
++     conjunto = rep("B", 5),
++     elementos = c("1", "1.5", "2", "2.5", "3"),
++     grado_pertenencia = c(1, 0.6, 0.8, 1, 0)
++ )
+> 
+> # Convertir los data frames en conjuntos manejables
+> A <- tidySet(conjunto_A)
+Error: Unable to create a TidySet object.
+The data.frame does not have the sets and elements columns.
+> View(conjunto_A)
+> View(conjunto_A)
+> View(conjunto_B)
+> conjunto_A
+  conjunto elementos grado_pertenencia
+1        A         1              1.00
+2        A       1.5              0.75
+3        A         2              0.30
+4        A       2.5              0.15
+5        A         3              1.00
+> conjunto_B
+  conjunto elementos grado_pertenencia
+1        B         1               1.0
+2        B       1.5               0.6
+3        B         2               0.8
+4        B       2.5               1.0
+5        B         3               0.0
+> fuzzy_A <- tidySet(conjunto_A)
+Error: Unable to create a TidySet object.
+The data.frame does not have the sets and elements columns.
+> # Declarar conjunto A
+> conjunto_A <- data.frame(
++     sets = rep("A", 5),
++     elements = c("1", "1.5", "2", "2.5", "3"),
++     grado_pertenencia = c(1, 0.75, 0.3, 0.15, 1)
++ )
+> 
+> # Declarar conjunto B
+> conjunto_B <- data.frame(
++     sets = rep("B", 5),
++     elements = c("1", "1.5", "2", "2.5", "3"),
++     grado_pertenencia = c(1, 0.6, 0.8, 1, 0)
++ )
+> 
+> # Convertir los data frames en conjuntos manejables
+> A <- tidySet(conjunto_A)
+> B <- tidySet(conjunto_B)
+> A
+  elements sets grado_pertenencia fuzzy
+1        1    A              1.00     1
+2      1.5    A              0.75     1
+3        2    A              0.30     1
+4      2.5    A              0.15     1
+5        3    A              1.00     1
+> 
+> B
+  elements sets grado_pertenencia fuzzy
+1        1    B               1.0     1
+2      1.5    B               0.6     1
+3        2    B               0.8     1
+4      2.5    B               1.0     1
+5        3    B               0.0     1
+> #Wow.
+> #-------------------------------------
+> 
+> # Ahora el NOT de A
+> A_negada <- A
+> A_negada$fuzzy <- 1 - A_negada$fuzzy
+> 
+> A_negada
+  elements sets grado_pertenencia fuzzy
+1        1    A              1.00     0
+2      1.5    A              0.75     0
+3        2    A              0.30     0
+4      2.5    A              0.15     0
+5        3    A              1.00     0
+> 
+> A_negada <- complement_set(A)
+Error in (function (classes, fdef, mtable)  : 
+  unable to find an inherited method for function ‘complement_set’ for signature ‘"TidySet", "missing"’
+> A_negada <- complement_set(A, sets = "A")
+> 
+> 
+> A_negada
+   elements sets grado_pertenencia fuzzy
+1         1    A              1.00     1
+2       1.5    A              0.75     1
+3         2    A              0.30     1
+4       2.5    A              0.15     1
+5         3    A              1.00     1
+6         1   ∁A              1.00     0
+7       1.5   ∁A              0.75     0
+8         2   ∁A              0.30     0
+9       2.5   ∁A              0.15     0
+10        3   ∁A              1.00     0
+> #No entiendo porqué hay una columna "fuzzy"... 
+> #Está operando la columna esa, no los grados de pertenencia.
+> #Volveré a hacerlo todo.
+> #Ya nimodo.

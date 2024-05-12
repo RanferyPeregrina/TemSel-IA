@@ -1,0 +1,221 @@
+
+
+(defun Hacer-CD (Titulo Artista Rating Reproducido)
+  (list :Titulo Titulo :Artista Artista :Rating Rating :Reproducido Reproducido))
+
+
+(Hacer-CD "Roses" "Kathy Mattea" 7 t)
+
+(defvar *BaseDeDatos* nil)
+
+(defun add-record (cd) (push cd *BaseDeDatos*))
+
+ (add-record (Hacer-CD "Roses" "Kathy Mattea" 7 t))
+ (add-record (Hacer-CD "Fly" "Dixie Chicks" 8 t))
+ (add-record (Hacer-CD "Home" "Dixie Chicks" 9 t))
+ (add-record (Hacer-CD "Fly" "Dixie Chicks" 8 t))
+
+; (defun dump-db ()
+;  (dolist (cd *db*)
+;  (format t "~{~a:~10t~a~%~}~%" cd)))
+
+
+(defun Desglosar-BaseDeDatos ()
+  (dolist (cd *BaseDeDatos*)
+    (format t "~{~a:~10t~a~%~}~%" cd)))
+
+(format t "~a:~10t~a" :artist "Dixie Chicks")
+
+; "Imprime    ARTIST: Dixie Chicks
+;             NIL"
+
+(Desglosar-BaseDeDatos); "Imprime la base de datos que emocionante"
+
+; (defun prompt-read (prompt)
+;  (format *query-io* "~a: " prompt)
+;  (force-output *query-io*)
+;  (read-line *query-io*))
+
+; (defun prompt-for-cd ()
+;  (make-cd
+;  (prompt-read "Title")
+;  (prompt-read "Artist")
+;  (or (parse-integer (prompt-read "Rating") :junk-allowed t) 0)
+;  (y-or-n-p "Ripped [y/n]: ")))
+
+(defun Leer-Preguntas (Pregunta_Recibida)
+  (format *query-io* "~a: " Pregunta_Recibida)
+  (force-output *query-io*)
+  (read-line *query-io*))
+
+ (defun Pedir_Datos_CD ()
+ (Hacer-CD
+ (Leer-Preguntas "Titulo")
+ (Leer-Preguntas "Artista")
+ (or (parse-integer (Leer-Preguntas "Rating") :junk-allowed t) 0)
+ (y-or-n-p "Reproducido [y/n]: ")))
+
+(defun AgregarDatos ()
+(loop (add-record (Pedir_Datos_CD))
+    (if (not (y-or-n-p "¿Agregar otra?[y/n]:  ")) (return))))
+
+; (defun add-cds ()
+;  (loop (add-record (prompt-for-cd))
+;  (if (not (y-or-n-p "Another? [y/n]: ")) (return))))
+
+(AgregarDatos)
+
+; CL-USER 33 : 4 > (AgregarDatos)
+; Titulo: Last Train at 25 O'Clock
+; Artista: Lamp
+; Rating: 9
+; NIL
+
+(Desglosar-BaseDeDatos)
+
+; TITULO:   Last Train at 25 O'Clock
+; ARTISTA:  Lamp
+; RATING:   9
+; REPRODUCIDO: T
+
+; TITULO:   Fly
+; ARTISTA:  Dixie Chicks
+; RATING:   8
+; REPRODUCIDO: T
+
+; TITULO:   Home
+; ARTISTA:  Dixie Chicks
+; RATING:   9
+; REPRODUCIDO: T
+
+; TITULO:   Fly
+; ARTISTA:  Dixie Chicks
+; RATING:   8
+; REPRODUCIDO: T
+
+; TITULO:   Roses
+; ARTISTA:  Kathy Mattea
+; RATING:   7
+; REPRODUCIDO: T
+
+; NIL
+
+
+; (defun save-db (filename)
+;  (with-open-file (out filename
+;  :direction :output
+;  :if-exists :supersede)
+;  (with-standard-io-syntax
+;  (print *db* out))))
+
+
+ (defun Guardar-BaseDeDatos (nombre-archivo)
+  (with-open-file (out nombre-archivo
+                      :direction :output
+                      :if-exists :supersede)
+    (with-standard-io-syntax
+      (print *BaseDeDatos* out))))
+
+(Guardar-BaseDeDatos "A:\\Tareas\\TemSel IA\\Lisp\\Mis-Discos.db")
+
+;  (remove-if-not
+;  #'(lambda (cd) (equal (getf cd :artist) "Dixie Chicks")) *db*)
+
+
+(remove-if-not #'(lambda (cd) (equal (getf cd :Artista) "Dixie Chicks")) *BaseDeDatos*)
+
+; (defun select-by-artist (artist)
+;  (remove-if-not
+;  #'(lambda (cd) (equal (getf cd :artist) artist))
+;  *db*))
+
+ (defun Seleccionar-PorArtista (Artista)
+ (remove-if-not
+ #'(lambda (cd) (equal (getf cd :Artista) Artista))
+ *BaseDeDatos*))
+
+ (defun Seleccionar-PorTitulo (Titulo)
+ (remove-if-not
+ #'(lambda (cd) (equal (getf cd :Titulo) Titulo))
+ *BaseDeDatos*))
+
+ (defun Seleccionar-PorRating (Rating)
+ (remove-if-not
+ #'(lambda (cd) (equal (getf cd :Rating) Rating))
+ *BaseDeDatos*))
+
+(Seleccionar-PorArtista "Lamp")
+(Seleccionar-PorTitulo "Fly")
+(Seleccionar-PorRating 8)
+
+
+(defun Seleccionar (selector-fn)
+ (remove-if-not selector-fn *BaseDeDatos*))
+
+; (select #'(lambda (cd) (equal (getf cd :artist) "Dixie Chicks")))
+
+(Seleccionar #'(lambda (cd) (equal (getf cd :Artista) "Dixie Chicks")))
+
+(defun Selector-Artista (Artista)
+ #'(lambda (cd) (equal (getf cd :Artista) Artista)))
+ (defun Selector-Titulo (Titulo)
+ #'(lambda (cd) (equal (getf cd :Titulo) Titulo)))
+ (defun Selector-Rating (Rating)
+ #'(lambda (cd) (equal (getf cd :Rating) Rating)))
+ (defun Selector-Reproducido (Reproducido)
+ #'(lambda (cd) (equal (getf cd :Reproducido) Reproducido)))
+ 
+(remove-if-not (Selector-Artista "Dixie Chicks") *BaseDeDatos*)
+
+(Seleccionar (Selector-Artista "Dixie Chicks"))
+(Seleccionar (Selector-Titulo "Fly"))
+(Seleccionar (Selector-Rating 8))
+(Seleccionar (Selector-Reproducido T))
+(Seleccionar (Selector-Reproducido NIL))
+
+; (defun where (&key title artist rating (ripped nil ripped-p))
+;  #'(lambda (cd)
+;  (and
+;  (if title (equal (getf cd :title) title) t)
+;  (if artist (equal (getf cd :artist) artist) t)
+;  (if rating (equal (getf cd :rating) rating) t)
+;  (if ripped-p (equal (getf cd :ripped) ripped) t))))
+
+ (defun where (&key Titulo Artista Rating (Reproducido nil Reproducido-p))
+ #'(lambda (cd)
+ (and
+ (if Titulo (equal (getf cd :Titulo) Titulo) t)
+ (if Artista (equal (getf cd :Artista) Artista) t)
+ (if Rating (equal (getf cd :Rating) Rating) t)
+ (if Reproducido-p (equal (getf cd :Reproducido) Reproducido) t))))
+
+; (defun update (Selector-fn &key title artist rating (ripped nil ripped-p))
+;  (setf *db*
+;  (mapcar
+;  #'(lambda (row)
+;  (when (funcall selector-fn row)
+;  (if title (setf (getf row :title) title))
+;  (if artist (setf (getf row :artist) artist))
+;  (if rating (setf (getf row :rating) rating))
+;  (if ripped-p (setf (getf row :ripped) ripped)))
+;  row) *db*)))
+
+ (defun Actualizar (selector-fn &key Titulo Artista Rating (Reproducido nil Reproducido-p))
+ (setf *BaseDeDatos*
+ (mapcar
+ #'(lambda (Registro)
+ (when (funcall selector-fn Registro)
+ (if Titulo (setf (getf Registro :Titulo) Titulo))
+ (if Artista (setf (getf Registro :Artista) Artista))
+ (if Rating (setf (getf Registro :Rating) Rating))
+ (if Reproducido-p (setf (getf Registro :Reproducido) Reproducido)))
+ Registro) *BaseDeDatos*)))
+
+ (Actualizar (where  :Artista "Dixie Chicks")  :rating 7) 
+ ;Degrada la calificación de las de Dixie a 7
+
+ (Seleccionar (where :artista "Dixie Chicks"))
+ (Seleccionar (where :Rating 8))
+
+(defun Borrar-Registro (selector-fn)
+ (setf *BaseDeDatos* (remove-if selector-fn *BaseDeDatos*)))

@@ -1,0 +1,31 @@
+	Masa
+Máximo 4000
+Mínimo 500
+Se ocupan de 1 a 12 dígitos binarios, ocuparemos 12
+
+	Velocidad
+Máximo 8.3
+Minimo 0
+Se ocupan de 1 a 10 dígitos binarios, pero ocupamos 10
+
+Entonces un string de 24
+dígitos expresa ambas características
+
+----------------------------------------------------------
+Mi serpiente
+520gramos		001000001000
+2.45m/s			00010 0101101
+001000001000 000010101101
+
+0 a 8.3 en pasos de 0.92
+000 0000000
+000 1011100
+
+
+
+
+
+
+
+
+

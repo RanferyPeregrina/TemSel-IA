@@ -1,0 +1,67 @@
+> DataSetChistoso <- data.frame(sets = c(rep("A", 5), rep("B", 5)),
++                               elements = c("1", "1.5", "2", "2.5", "3"),
++                               fuzzy = c(1,0.75,0.3,0.15,1,1,0.6,0.8,1,0))
+> 
+> #Ahora hacer "tidy" el "DataSetChistoso"
+> DataSet_Tidy <- tidySet(DataSetChistoso)
+> DataSet_Tidy
+   elements sets fuzzy
+1         1    A  1.00
+2       1.5    A  0.75
+3         2    A  0.30
+4       2.5    A  0.15
+5         3    A  1.00
+6         1    B  1.00
+7       1.5    B  0.60
+8         2    B  0.80
+9       2.5    B  1.00
+10        3    B  0.00
+>
+>
+> #------------Operadores lógicos---------------
+> #Negación
+> A_Negado <- complement_set(DataSet_Tidy, sets = "A", keep = FALSE)
+> A_Negado
+  elements sets fuzzy
+1        1   ∁A  0.00
+2      1.5   ∁A  0.25
+3        2   ∁A  0.70
+4      2.5   ∁A  0.85
+5        3   ∁A  0.00
+>
+> B_Negado <- complement_set(DataSet_Tidy, sets = "B", keep = FALSE)
+> B_Negado
+  elements sets fuzzy
+1        1   ∁B   0.0
+2      1.5   ∁B   0.4
+3        2   ∁B   0.2
+4      2.5   ∁B   0.0
+5        3   ∁B   1.0
+
+> #A unión B
+> A_Union_B <- BaseSet::union(DataSet_Tidy, sets = c("A", "B"))
+> A_Union_B
+  elements sets fuzzy
+1        1  A∪B  1.00
+2      1.5  A∪B  0.75
+3        2  A∪B  0.80
+4      2.5  A∪B  1.00
+5        3  A∪B  1.00
+>
+> A_Interseccion_B <- intersection(DataSet_Tidy, sets = c("A", "B"), keep = FALSE)
+> A_Interseccion_B
+  elements sets fuzzy
+1        1  A∩B  1.00
+2      1.5  A∩B  0.60
+3        2  A∩B  0.30
+4      2.5  A∩B  0.15
+5        3  A∩B  0.00
+
+> A_Interseccion_B_Negado <- intersection(DataSet_Tidy, sets = c("A"), "B_Negado" , keep = FALSE)
+> A_Interseccion_B_Negado
+  elements     sets fuzzy
+1        1 B_Negado  1.00
+2      1.5 B_Negado  0.75
+3        2 B_Negado  0.30
+4      2.5 B_Negado  0.15
+5        3 B_Negado  1.00
