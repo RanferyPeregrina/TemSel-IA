@@ -1,12 +1,12 @@
 	Masa
-Máximo 4000
-Mínimo 500
+Máximo 4000	gr
+Mínimo 500	gr
 Se ocupan de 1 a 12 dígitos binarios, ocuparemos 12
 
 	Velocidad
-Máximo 8.3
-Minimo 0
-Se ocupan de 1 a 10 dígitos binarios, pero ocupamos 10
+Máximo 8.3	m/s
+Minimo 0	m/s
+Se ocupan de 1 a 10 dígitos binarios, pero ocupamos 12
 
 Entonces un string de 24
 dígitos expresa ambas características
@@ -17,10 +17,34 @@ Mi serpiente
 2.45m/s			00010 0101101
 001000001000 000010101101
 
-0 a 8.3 en pasos de 0.92
-000 0000000
-000 1011100
+----------------------------------------------------------
+Variación de masa 10 números diversos:
 
+----------------------------------------------------------
+Variación de velocidad 10 números diversos:
+0 a 8.3 en pasos de 0.92
+Numero1:  0
+Numero2:  0.92222222
+Numero3:  1.84444444
+Numero4:  2.76666666
+Numero5:  3.68888888
+Numero6:  4.6111111
+Numero7:  5.53333332
+Numero8:  6.45555554
+Numero9:  7.37777776
+Numero10: 8.299
+
+Pero nosotros escribimos:
+Numero1:  0		0000 0000000
+Numero2:  0.92		0000 1011100	
+Numero3:  1.84		0001 1010100
+Numero4:  2.76		0010 1001100
+Numero5:  3.68		0011 1000100
+Numero6:  4.61		0100 0111101
+Numero7:  5.53		0101 0110101
+Numero8:  6.45		0110 0101101
+Numero9:  7.37		0111 0100101
+Numero10: 8.3	       	1000 0000011
 
 
 
