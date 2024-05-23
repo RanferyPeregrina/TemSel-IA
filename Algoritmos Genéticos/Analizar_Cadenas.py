@@ -51,8 +51,10 @@ def CalificarCadena(Cadena, ImpresionPermitida):
     Cuenta = 0
     Contador1s = 0
     Contador0s = 0
+
+
     for Bit in range (len(Cadena)):
-  
+
         if ImpresionPermitida == True:
             print()
             print(f"En el espacio {Bit + 1} el bit es: {Cadena[Bit]}")
@@ -129,7 +131,33 @@ def main():
 
 
 ImpresionPermitida = PreguntarImpresion()
-Cadena = PedirCadena(ImpresionPermitida)
-Calificacion = CalificarCadena(Cadena, ImpresionPermitida)
+Tamaño_Poblacion = int(input("\nTamaño de su población:  "))
+Calificaciones = []
+                       
+for i in range(Tamaño_Poblacion):
+    Cadena = PedirCadena(ImpresionPermitida)
 
-print(f"Cadena {Cadena} calificada como: {Calificacion}")
+    if len(Cadena) == 8:
+
+        Mitad_Cadena = (Cadena[0:4])
+        Calificacion1 = CalificarCadena(Mitad_Cadena, ImpresionPermitida)
+        print(f"Media cadena:{Mitad_Cadena} calificada como: {Calificacion1}")
+
+        Mitad_Cadena = (Cadena[4:8])
+        Calificacion2 = CalificarCadena(Mitad_Cadena, ImpresionPermitida)
+        print(f"Media cadena:{Mitad_Cadena} calificada como: {Calificacion2}")
+        print(" ----------------------------------------------------------- ")
+        Calificacion = Calificacion1 + Calificacion2
+        
+        Calificaciones.append(Calificacion)
+        print(f"Calificación = {Calificacion1} + {Calificacion2} = {Calificacion}")
+
+
+    elif len(Cadena) == 4:
+        Calificacion = CalificarCadena(Cadena, ImpresionPermitida)
+        print(f"Cadena {Cadena} calificada como: {Calificacion}")
+
+Calificacion_Poblacion = sum(Calificaciones)
+print(f"Las calificaciones entonces son: {Calificaciones}")
+print(f"Y la calificación de la población es:  {Calificacion_Poblacion}")
+
