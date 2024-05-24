@@ -190,7 +190,7 @@ Nueva_Poblacion <- Generar_Nueva_Poblacion(Poblacion_Inicial, Putuaciones, lengt
 
 
 # ===============================================================================
-#= ======================== Aquí se hace la mutación ============================
+# ======================== Aquí se hace la mutación ============================
 # ===============================================================================
 #
 # Función para invertir un bit en una posición específica
@@ -232,7 +232,6 @@ print(paste("Poblacion despues de la mutacion: ",Poblacion_Mutada))
 # Aquí toca repetir todo el rollo hasta que ya no haya mejoras significativas en la
 # Calificación de la población.
 # Que emocionante xd
-
 Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones, Limite_Iteraciones_NoMejora) {
   Poblacion <- Generar_Poblacion(Tamaño_Poblacion, Tamaño_Individuo)
   Mejores_Calificaciones <- c()
@@ -241,10 +240,10 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
   
   repeat {
     Putuaciones <- Evaluar_Poblacion(Poblacion)
-    Mejor_Puntuacion <- max(Putuaciones)
-    Mejores_Calificaciones <- c(Mejores_Calificaciones, Mejor_Puntuacion)
+    PuntuacionTotal <- Calcular_PuntuacionTotal(Putuaciones)
+    Mejores_Calificaciones <- c(Mejores_Calificaciones, PuntuacionTotal)
     
-    cat("Iteración:", Iteracion, "Mejor puntuación:", Mejor_Puntuacion, "\n")
+    cat("Iteración:", Iteracion, "Puntuación total:", PuntuacionTotal, "\n")
     
     if (length(Mejores_Calificaciones) > 1 && Mejores_Calificaciones[length(Mejores_Calificaciones)] == Mejores_Calificaciones[length(Mejores_Calificaciones) - 1]) {
       Cuenta_NoMejora <- Cuenta_NoMejora + 1
@@ -265,6 +264,7 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
   return(Poblacion)
 }
 
+
 # Parámetros del algoritmo
 Tamaño_Poblacion <- 7
 Tamaño_Individuo <- 8
@@ -274,5 +274,5 @@ Limite_Iteraciones_NoMejora <- 10
 # Ejecutar el algoritmo genético
 Poblacion_Final <- Hacer_Todo(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones, Limite_Iteraciones_NoMejora)
 
-# Imprimir la población final
+# Imprimir la población final✨🎉
 print(paste("Población final: ", Poblacion_Final))
