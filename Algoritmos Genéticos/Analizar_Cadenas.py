@@ -113,23 +113,6 @@ def PedirCadena(ImpresionPermitida):
         if(ValidarCadena(Cadena, ImpresionPermitida)) == True:
             return Cadena;
 
-def main():
-    ImpresionPermitida = PreguntarImpresion()
-
-    Cantidad_Individuos = int(input("Ingrese la cantidad de individuos:  "))
-    Individuos = []
-    Calificacion_Individuos = []
-
-    for i in range(Cantidad_Individuos):
-        Individuos.append(PedirCadena(ImpresionPermitida))
-        Calificacion_Individuos.append(CalificarCadena(Individuos[i], ImpresionPermitida))
-
-    Imprimir = input("¿Imprimir calificaciones? Sí/No:  ")
-    if Imprimir == "Si":
-        for i in range(Cantidad_Individuos):
-            print(f"Calificación del individuo {i + 1}: {Calificacion_Individuos[i]}")
-
-
 ImpresionPermitida = PreguntarImpresion()
 Tamaño_Poblacion = int(input("\nTamaño de su población:  "))
 Calificaciones = []

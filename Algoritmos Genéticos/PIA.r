@@ -11,14 +11,23 @@ Generar_IndividuosAleatorios <- function(length) {
   paste(sample(c(0, 1), length, replace = TRUE), collapse = "")
 }
 
-# Paso 3: Crear una población de 7 individuos utilizando la función anterior
-Generar_Poblacion <- function(Tamaño_Poblacion, Tamaño_Individuo) {
-  Poblacion <- character(Tamaño_Poblacion)
-  for (i in 1:Tamaño_Poblacion) {
-    Poblacion[i] <- Generar_IndividuosAleatorios(Tamaño_Individuo)
+# Paso 3: Crear una población de 7 individuos utilizando la función anterior o una población predefinida
+Generar_Poblacion <- function(Tamaño_Poblacion, Tamaño_Individuo, Poblacion_Predefinida = NULL) {
+  if (!is.null(Poblacion_Predefinida)) {
+    return(Poblacion_Predefinida)
+  } else {
+    Poblacion <- character(Tamaño_Poblacion)
+    for (i in 1:Tamaño_Poblacion) {
+      Poblacion[i] <- Generar_IndividuosAleatorios(Tamaño_Individuo)
+    }
+    return(Poblacion)
   }
-  return(Poblacion)
 }
+
+# # Aquí tenemos que poner una población si queremos usar una de testeo
+# Poblacion_Predefinida <- c("11111101", "11110111", "11111101", "01110111", "11110111", "11010111", "11111110")
+# # Generar la población inicial con la población predefinida
+# Poblacion_Inicial <- Generar_Poblacion(Tamaño_Poblacion, Tamaño_Individuo, Poblacion_Predefinida)
 
 # Generar la población inicial
 Poblacion_Inicial <- Generar_Poblacion(Tamaño_Poblacion, Tamaño_Individuo)
