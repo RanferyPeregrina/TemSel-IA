@@ -3,25 +3,41 @@
 # ===============================================================================
 #
 # Paso 1: Definir el tamaño de la población y la longitud de las cadenas binarias
-Tamaño_Poblacion <- 7
+Tamaño_Poblacion <- 20
 Tamaño_Individuo <- 8
 
 # Paso 2: Crear una función para generar una cadena binaria aleatoria de longitud 8
 Generar_IndividuosAleatorios <- function(length) {
-  paste(sample(c(0, 1), length, replace = TRUE), collapse = "")
+  individuo <- paste(sample(c(0, 1), length, replace = TRUE), collapse = "")
+  if (nchar(individuo) > 8) {
+
+    # 🚫 No. El individuo debe ESTRICTAMENTE medir 8 caracteres de largo.
+    # Porque estamos calificando individuos de 8 caracteres de largo.
+    # Si permitimos individuos de mayor longitud y los dividimos en cuartetos, los que sí miden 8 quedarán en desventaja.
+    # Si el problema plantea 8 caracteres por individuo, es porque está calificando algo representado por una cadena de 8 caracteres.
+    # Y usar algo que no sean esos 8 caracteres, mi representación sería inexacta.
+
+    individuo <- substr(individuo, 1, 8)
+    cat("Así que tomaré los primeros 8 dígitos de cada individuo.")
+  } else if (nchar(individuo) < 8) {
+    individuo <- sprintf("%08s", individuo)
+  }
+  return(individuo)
 }
 
 # Paso 3: Crear una población de 7 individuos utilizando la función anterior o una población predefinida
 Generar_Poblacion <- function(Tamaño_Poblacion, Tamaño_Individuo, Poblacion_Predefinida = NULL) {
   if (!is.null(Poblacion_Predefinida)) {
-    return(Poblacion_Predefinida)
+    Tamaño_Poblacion <- 7
+    Poblacion <- Poblacion_Predefinida
   } else {
+    Tamaño_Poblacion <- 7
     Poblacion <- character(Tamaño_Poblacion)
     for (i in 1:Tamaño_Poblacion) {
       Poblacion[i] <- Generar_IndividuosAleatorios(Tamaño_Individuo)
     }
-    return(Poblacion)
   }
+  return(Poblacion)
 }
 
 # # Aquí tenemos que poner una población si queremos usar una de testeo
@@ -242,6 +258,7 @@ print(paste("Poblacion despues de la mutacion: ",Poblacion_Mutada))
 # Calificación de la población.
 # Que emocionante xd
 Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones, Limite_Iteraciones_NoMejora) {
+  Tamaño_Poblacion <- 7
   Poblacion <- Generar_Poblacion(Tamaño_Poblacion, Tamaño_Individuo)
   Mejores_Calificaciones <- c()
   Cuenta_NoMejora <- 0
@@ -275,10 +292,10 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
 
 
 # Parámetros del algoritmo
-Tamaño_Poblacion <- 7
-Tamaño_Individuo <- 8
-Limite_Iteraciones <- 100
-Limite_Iteraciones_NoMejora <- 10
+Tamaño_Poblacion <- Tamaño_Poblacion
+Tamaño_Individuo <- Tamaño_Individuo
+Limite_Iteraciones <- 10000
+Limite_Iteraciones_NoMejora <- 100
 
 # Ejecutar el algoritmo genético
 Poblacion_Final <- Hacer_Todo(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones, Limite_Iteraciones_NoMejora)
