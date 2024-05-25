@@ -63,7 +63,6 @@ Generar_Poblacion <- function(Tamaño_Poblacion, Tamaño_Individuo, Poblacion_Pr
   return(Poblacion)
 }
 
-
 Evaluar_Mitad <- function(Mitad) {
     Cuenta <- 0
     Cuenta_1s <- 0
@@ -295,8 +294,8 @@ Tamaño_Poblacion <- Tamaño_Poblacion
 Tamaño_Individuo <- Tamaño_Individuo
 
 #Estos datos sí se pueden cambiar para hacer pruebas.
-Limite_Iteraciones <- 2
-Limite_Iteraciones_NoMejora <- 20
+Limite_Iteraciones <- 100
+Limite_Iteraciones_NoMejora <- 10
 
 Poblacion_Final <- Hacer_Todo(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones, Limite_Iteraciones_NoMejora)
 
