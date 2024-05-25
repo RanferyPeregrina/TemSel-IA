@@ -11,12 +11,10 @@ Generar_IndividuosAleatorios <- function(length) {
   individuo <- paste(sample(c(0, 1), length, replace = TRUE), collapse = "")
   if (nchar(individuo) > 8) {
     individuo <- substr(individuo, 1, 8)
-    cat("Así que tomaré los primeros 8 dígitos de cada individuo.\n")
-  } else if (nchar(individuo) < 8) {
-    individuo <- sprintf("%08s", individuo)
-    # Reemplazar espacios en blanco con ceros
-    individuo <- gsub(" ", "0", individuo)
-  }
+    print("Se indicó un tamaño de cadena de más de 8 caracteres. Pero eso no es posible")
+    print("Se escribirán individuos sólo con los primeros 8 caracteres.")
+  } 
+
   return(individuo)
 }
 
@@ -28,6 +26,19 @@ Generar_Poblacion <- function(Tamaño_Poblacion, Tamaño_Individuo, Poblacion_Pr
     Poblacion <- character(Tamaño_Poblacion)
     Individuos_Generados <- character()
     max_intentos <- 10  
+
+    if (Tamaño_Individuo < 8) {
+      print("Se indicó un tamaño de cadena de menos de 8 caracteres. Pero eso no es posible")
+      print("Se escribirán individuos de 8 caracteres.")
+      Tamaño_Individuo <- 8
+    }
+
+    if(Tamaño_Poblacion <= 7){
+      print(" - - - - - - - -¡¡ADVERTENCIA!! - - - - - - -")
+      print("La población introducida es tan pequeña que no habrá suficientes individuos para combinar.")
+      print("El programa está hecho para funcionar con 8")
+      cat("El programa no  se detendrá, pero así no debería operar.", "\n\n")
+    }
 
     for (i in 1:Tamaño_Poblacion) {
       intentos <- 0
@@ -52,18 +63,6 @@ Generar_Poblacion <- function(Tamaño_Poblacion, Tamaño_Individuo, Poblacion_Pr
   return(Poblacion)
 }
 
-Generar_IndividuosAleatorios <- function(length) {
-  individuo <- paste(sample(c(0, 1), length, replace = TRUE), collapse = "")
-  if (nchar(individuo) > 8) {
-    individuo <- substr(individuo, 1, 8)
-    cat("Así que tomaré los primeros 8 dígitos de cada individuo.\n")
-  } else if (nchar(individuo) < 8) {
-    individuo <- sprintf("%08s", individuo)
-    # Reemplazar espacios en blanco con ceros
-    individuo <- gsub(" ", "0", individuo)
-  }
-  return(individuo)
-}
 
 Evaluar_Mitad <- function(Mitad) {
     Cuenta <- 0
@@ -143,9 +142,6 @@ Calcular_PuntuacionTotal <- function(Putuaciones) {
   return(PuntuacionTotal)
 }
 
-
-
-
 Elegir_MejoresIndividuos <- function(Poblacion, Putuaciones, MejorIndividuo_Indice) {
   Individuos_Ordenados <- order(Putuaciones, decreasing = TRUE)
   MejoresIndividuos <- Poblacion[Individuos_Ordenados[1:MejorIndividuo_Indice]]
@@ -156,7 +152,6 @@ Elegir_MejoresIndividuos <- function(Poblacion, Putuaciones, MejorIndividuo_Indi
   
   return(MejoresIndividuos)
 }
-
 
 Cruzar_Poblacion <- function(ind1, ind2) {
   midpoint <- nchar(ind1) / 2
@@ -170,7 +165,6 @@ Cruzar_Poblacion <- function(ind1, ind2) {
   return(c(child1, child2))
 }
 
-# Generar nueva población mediante cruces
 Generar_Nueva_Poblacion <- function(Poblacion, Putuaciones, Tamaño_Poblacion) {
   MejoresIndividuos <- Elegir_MejoresIndividuos(Poblacion, Putuaciones, Tamaño_Poblacion)
   Nueva_Poblacion <- character() 
@@ -200,7 +194,6 @@ Generar_Nueva_Poblacion <- function(Poblacion, Putuaciones, Tamaño_Poblacion) {
   return(Nueva_Poblacion)
 }
 
-
 Mutar_Bit <- function(individual, position) {
   bits <- unlist(strsplit(individual, ""))
   position <- ((position - 1) %% length(bits)) + 1
@@ -213,7 +206,6 @@ Mutar_Bit <- function(individual, position) {
   return(Mutar_Individual)
 }
 
-# Función para mutar la población
 Mutar_Poblacion <- function(Poblacion) {
   for (i in 1:length(Poblacion)) {
     Poblacion[i] <- Mutar_Bit(Poblacion[i], i)
@@ -223,58 +215,52 @@ Mutar_Poblacion <- function(Poblacion) {
   return(Poblacion)
 }
 
-
 Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones, Limite_Iteraciones_NoMejora) {
-  Poblacion_Predefinida <- c("11001010", "10101010", "11100011", "00001111", "10110101", "11011101", "01010101", "00110011")
-  Poblacion <- Generar_Poblacion(Tamaño_Poblacion, Tamaño_Individuo, Poblacion_Predefinida)
+  Poblacion <- Generar_Poblacion(Tamaño_Poblacion, Tamaño_Individuo)
   Mejores_Calificaciones <- c()
+  Puntuaciones_Iteraciones <- data.frame(Iteracion = integer(), Puntuacion = numeric())
   Cuenta_NoMejora <- 0
   Iteracion <- 1
   
   repeat {
-    
     if(Iteracion == 1){
-     
       cat("\n\n")
       print(" ================================================================== ")
       print(" POBLACION INICIAL:               ")
       print(Poblacion)
-      Putuaciones <- Evaluar_Poblacion(Poblacion)
-      PuntuacionTotal <- Calcular_PuntuacionTotal(Putuaciones)
+      Puntuaciones <- Evaluar_Poblacion(Poblacion)
+      PuntuacionTotal <- Calcular_PuntuacionTotal(Puntuaciones)
       cat("Puntuación inicial: ", PuntuacionTotal)
       Mejores_Calificaciones <- c(Mejores_Calificaciones, PuntuacionTotal)
+      Puntuaciones_Iteraciones <- rbind(Puntuaciones_Iteraciones, data.frame(Iteracion = Iteracion, Puntuacion = PuntuacionTotal))
       
       cat("\n")
-      Nueva_Poblacion <- Generar_Nueva_Poblacion(Poblacion, Putuaciones, Tamaño_Poblacion)
+      Nueva_Poblacion <- Generar_Nueva_Poblacion(Poblacion, Puntuaciones, Tamaño_Poblacion)
       Poblacion <- Nueva_Poblacion
       cat("\n")
-
       Poblacion <- Mutar_Poblacion(Poblacion)
-      Putuaciones <- Evaluar_Poblacion(Poblacion)
-      PuntuacionTotal <- Calcular_PuntuacionTotal(Putuaciones)
+      Puntuaciones <- Evaluar_Poblacion(Poblacion)
+      PuntuacionTotal <- Calcular_PuntuacionTotal(Puntuaciones)
       cat("Puntuación después de mutar: ", PuntuacionTotal, "\n")
-
-    }
-    else{
+    } else {
       cat("\n")
       print("==========================================================================")
       cat("Iteración: ", (Iteracion), "\n")
       print(Poblacion)
-      Putuaciones <- Evaluar_Poblacion(Poblacion)
-      PuntuacionTotal <- Calcular_PuntuacionTotal(Putuaciones)
+      Puntuaciones <- Evaluar_Poblacion(Poblacion)
+      PuntuacionTotal <- Calcular_PuntuacionTotal(Puntuaciones)
       cat("Puntuación inicial: ", PuntuacionTotal)
       Mejores_Calificaciones <- c(Mejores_Calificaciones, PuntuacionTotal)
+      Puntuaciones_Iteraciones <- rbind(Puntuaciones_Iteraciones, data.frame(Iteracion = Iteracion, Puntuacion = PuntuacionTotal))
 
       cat("\n")
-      Nueva_Poblacion <- Generar_Nueva_Poblacion(Poblacion, Putuaciones, Tamaño_Poblacion)
+      Nueva_Poblacion <- Generar_Nueva_Poblacion(Poblacion, Puntuaciones, Tamaño_Poblacion)
       Poblacion <- Nueva_Poblacion
       cat("\n")
-      
       Poblacion <- Mutar_Poblacion(Poblacion)
-      Putuaciones <- Evaluar_Poblacion(Poblacion)
-      PuntuacionTotal <- Calcular_PuntuacionTotal(Putuaciones)
+      Puntuaciones <- Evaluar_Poblacion(Poblacion)
+      PuntuacionTotal <- Calcular_PuntuacionTotal(Puntuaciones)
       cat("Puntuación después de mutar: ", PuntuacionTotal, "\n")
-
 
       if (length(Mejores_Calificaciones) > 1 && Mejores_Calificaciones[length(Mejores_Calificaciones)] == Mejores_Calificaciones[length(Mejores_Calificaciones) - 1]) {
         Cuenta_NoMejora <- Cuenta_NoMejora + 1
@@ -283,13 +269,24 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
       }
       
       if (Cuenta_NoMejora >= Limite_Iteraciones_NoMejora || Iteracion >= Limite_Iteraciones) {
-      
         break
       }
-
     }
     Iteracion <- Iteracion + 1
   }
+
+  # Crear gráfica y guardarla en un objeto
+  grafica <- ggplot(Puntuaciones_Iteraciones, aes(x = Iteracion, y = Puntuacion)) +
+    geom_line() +
+    geom_point() +
+    labs(title = "Evolución de la Puntuación en Cada Iteración",
+         x = "Iteración",
+         y = "Puntuación") +
+    theme_minimal()
+
+  # Imprimir la gráfica
+  print(grafica)
+
   return(Poblacion)
 }
 
@@ -298,8 +295,8 @@ Tamaño_Poblacion <- Tamaño_Poblacion
 Tamaño_Individuo <- Tamaño_Individuo
 
 #Estos datos sí se pueden cambiar para hacer pruebas.
-Limite_Iteraciones <- 3
-Limite_Iteraciones_NoMejora <- 10
+Limite_Iteraciones <- 2
+Limite_Iteraciones_NoMejora <- 20
 
 Poblacion_Final <- Hacer_Todo(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones, Limite_Iteraciones_NoMejora)
 
