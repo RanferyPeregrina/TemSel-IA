@@ -1,58 +1,84 @@
-# ===============================================================================
-## ====================== Aquí se generan los individuos ========================
-# ===============================================================================
-#
-# Paso 1: Definir el tamaño de la población y la longitud de las cadenas binarias
-Tamaño_Poblacion <- 7
-Tamaño_Individuo <- 8
+#Para manejar mejor las cadenas de datos
+library(stringr)
 
-# Paso 2: Crear una función para generar una cadena binaria aleatoria de longitud 8
+
+Tamaño_Poblacion <- 5
+Tamaño_Individuo <- 2
+
+#Esta función recibe la longitud de los datos que va a crear
 Generar_IndividuosAleatorios <- function(length) {
+  
+  #Crea un arreglo vacío donde va a llenarla aleatoriamente de 0s y 1s.
+  #Y va a remplazar lo que había originalmente en ese string que creó (Que era "" osea nada)
   individuo <- paste(sample(c(0, 1), length, replace = TRUE), collapse = "")
+
+  #Si recibe la orden de hacer individuos con una longitud mayor a 8
   if (nchar(individuo) > 8) {
-
-    # 🚫 No. El individuo debe ESTRICTAMENTE medir 8 caracteres de largo.
-    # Porque estamos calificando individuos de 8 caracteres de largo.
-    # Si permitimos individuos de mayor longitud y los dividimos en cuartetos, los que sí miden 8 quedarán en desventaja.
-    # Si el problema plantea 8 caracteres por individuo, es porque está calificando algo representado por una cadena de 8 caracteres.
-    # Y usar algo que no sean esos 8 caracteres, mi representación sería inexacta.
-
+    #De cada individuo creado sólo guardará los primeros 8 caracteres
     individuo <- substr(individuo, 1, 8)
-    cat("Así que tomaré los primeros 8 dígitos de cada individuo.")
+    cat("Así que tomaré los primeros 8 dígitos de cada individuo.\n")
+
+  #Si recibe la orden de hacer individuos con una longitud menor a 8  
   } else if (nchar(individuo) < 8) {
-    individuo <- sprintf("%08s", individuo)
+    #Los va a hacer, pero les va a poner 0s a la izquierda para rellenar.
+    individuo <- str_pad(individuo, width = 8, side = "left", pad = "0")
   }
   return(individuo)
 }
 
-# Paso 3: Crear una población de 7 individuos utilizando la función anterior o una población predefinida
+
+
 Generar_Poblacion <- function(Tamaño_Poblacion, Tamaño_Individuo, Poblacion_Predefinida = NULL) {
+  
+  #Si el espacio para "Población_Predefinida" no está vacío. Significa que sí le pasamos
+  #Una población predefinida. En ese caso...
   if (!is.null(Poblacion_Predefinida)) {
-    Tamaño_Poblacion <- 7
-    Poblacion <- Poblacion_Predefinida
-  } else {
-    Tamaño_Poblacion <- 7
-    Poblacion <- character(Tamaño_Poblacion)
+    Poblacion <- Poblacion_Predefinida  #Que use esa.
+  } 
+  #Pero si no... (Que lo más probable es que no)
+  else {
+    CuentaRepeticion <- 0   #Cuenta de cuántas veces está intentando generar... Nos ayudará a detectar errores
+    Poblacion <- character(Tamaño_Poblacion)  #Crea un arreglo llamado "Población" del tamaño requerido
+    Individuos_Generados <- character()       #Crea un arreglo que inicia bacío donde vamos a ir guardando los generados
+    max_intentos <- 10    # Número máximo de intentos para evitar repeticiones
+                          # Si tras esa cantidad de intentos no logra generar números distintos
+                          # Que deje de intentarlo. Probablemente no se puede.
+
     for (i in 1:Tamaño_Poblacion) {
-      Poblacion[i] <- Generar_IndividuosAleatorios(Tamaño_Individuo)
+      intentos <- 0
+      repeat {
+
+        #Genera un nuevo individyo llamando a esa función de generar individuos.
+        nuevo_individuo <- Generar_IndividuosAleatorios(Tamaño_Individuo)
+
+        #Si ese individuo NO está en nustra lsita de individuos.
+        if (!(nuevo_individuo %in% Individuos_Generados)) {
+          #Lo mete a la lista.
+          Poblacion[i] <- nuevo_individuo
+          Individuos_Generados <- c(Individuos_Generados, nuevo_individuo)
+          break
+        } 
+        
+        #Pero si SÍ está en la lsita de individuos
+        else {
+          intentos <- intentos + 1    #Que cuente que lo está intentando de nuevo.
+          if (intentos >= max_intentos) {
+            #cat("No hay más combinaciones posibles sin repetir los números. Permitida la repetición.\n")
+            Poblacion[i] <- nuevo_individuo
+            break
+          }
+        }
+      }
     }
   }
   return(Poblacion)
 }
 
-# Generar la población inicial
 Poblacion_Inicial <- Generar_Poblacion(Tamaño_Poblacion, Tamaño_Individuo)
 
-# Imprimir la población inicial
-print(Poblacion_Inicial)
 
 
-# ===============================================================================
-# ====================== Aquí se evalúan los individuos =========================
-# ===============================================================================
-#
 
-# Función para evaluar una mitad de una cadena binaria
 Evaluar_Mitad <- function(Mitad) {
     #Se inicia en 0 la cuenta de puntuacion, y la de 1s y 0s   
     Cuenta <- 0
@@ -131,6 +157,7 @@ Evaluar_Poblacion <- function(Poblacion) {
   for (i in 1:length(Poblacion)) {
     Putuaciones[i] <- Evaluar_Individuo(Poblacion[i])
   }
+  print(Poblacion_Inicial)
   print(Putuaciones)
   return(Putuaciones)
 }
@@ -212,11 +239,14 @@ Nueva_Poblacion <- Generar_Nueva_Poblacion(Poblacion_Inicial, Putuaciones, lengt
 # ===============================================================================
 # =<======================== Aquí se hace la mutación ============================
 # ===============================================================================
-#
+
+
 # Función para invertir un bit en una posición específica
+
 Mutar_Bit <- function(individual, position) {
-  # Convertir la cadena binaria a una lista de caracteres
   bits <- unlist(strsplit(individual, ""))
+  # Ajustar la posición utilizando el operador módulo
+  position <- ((position - 1) %% length(bits)) + 1
   # Invertir el bit en la posición especificada
   if (bits[position] == "0") {
     bits[position] <- "1"
@@ -277,7 +307,8 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
     
     Nueva_Poblacion <- Generar_Nueva_Poblacion(Poblacion, Putuaciones, Tamaño_Poblacion)
     Poblacion <- Mutar_Poblacion(Nueva_Poblacion)
-    cat("\nPoblación de la iteración ", Iteracion, ": ", Poblacion)
+    print(" -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -")
+    cat("\nPoblación de la iteración ", Iteracion + 1, ": ", Poblacion)
     Iteracion <- Iteracion + 1
   }
   
@@ -286,9 +317,9 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
 
 
 # Parámetros del algoritmo
-Tamaño_Poblacion <- 7
-Tamaño_Individuo <- 8
-Limite_Iteraciones <- 10000
+Tamaño_Poblacion <- Tamaño_Poblacion
+Tamaño_Individuo <- Tamaño_Individuo
+Limite_Iteraciones <- 2
 Limite_Iteraciones_NoMejora <- 100
 
 # Ejecutar el algoritmo genético

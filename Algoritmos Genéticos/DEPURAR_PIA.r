@@ -1,5 +1,4 @@
 library(stringr)
-library(ggplot2)
 
 
 #Estos datos no se cambian.
@@ -233,8 +232,11 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
   
   repeat {
     
+    
+
     if(Iteracion == 1){
-     
+      
+      
       cat("\n\n")
       print(" ================================================================== ")
       print(" POBLACION INICIAL:               ")
@@ -286,12 +288,17 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
       
         break
       }
-
+    
+      
+      
+      
     }
+
     Iteracion <- Iteracion + 1
   }
   return(Poblacion)
 }
+
 
 #Estos datos no se cambian.
 Tamaño_Poblacion <- Tamaño_Poblacion
