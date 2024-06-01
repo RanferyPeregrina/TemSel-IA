@@ -1,0 +1,21 @@
+% Primero reconocer si un caracter es '0' o '1'
+is_binary_digit('0').
+is_binary_digit('1').
+
+% Después verificar si una lista es una cadena de 8 caracteres de longitud
+valid_binary(BinaryString) :-
+    length(BinaryString, 8),
+    maplist(is_binary_digit, BinaryString).
+
+% Aquí comparamos ambas
+compare_binaries(BinaryString1, BinaryString2) :-
+    valid_binary(BinaryString1),
+    valid_binary(BinaryString2),
+    BinaryString1 == BinaryString2.
+?- [binary_compare].
+
+?- compare_binaries(['1','0','0','1','1','0','0','1'], ['1','0','0','1','1','0','0','1']).
+true.
+
+?- compare_binaries(['1','0','0','1','1','0','0','1'], ['1','0','0','1','0','0','0','1']).
+false.

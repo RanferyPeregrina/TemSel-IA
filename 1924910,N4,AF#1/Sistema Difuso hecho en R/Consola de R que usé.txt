@@ -1,0 +1,97 @@
+Loading required package: BaseSet
+
+Attaching package: ‘BaseSet’
+
+The following object is masked from ‘package:stats’:
+
+    filter
+
+The following object is masked from ‘package:base’:
+
+    union
+
+> library(sets)
+
+Attaching package: ‘sets’
+
+The following object is masked from ‘package:BaseSet’:
+
+    %>%
+
+> #----------------- Creación del sistema difuso -------------------------------
+> 
+> sets_options("universe", seq(1, 150, 0.5))
+> variables <- set(
++     Densidad_Trafico = fuzzy_partition(varnames = c(Baja = 50, Moderado = 100, Alta = 150), sd = 5.0),
++     Velocidad_Trafico = fuzzy_partition(varnames = c(Estacionario = 5, Lento = 10, Rapido = 50), sd = 3.0),
++     #Estado_Carretera = fuzzy_partition(varnames = c(Mala= 6, Descuidada = 4,  BienCuidada = 90), sd = 7.5),
++     Cantidad_Ruido =fuzzy_partition(varnames = c(Callado= 53, Moderado = 70,  Ruidoso = 85), sd = 7.5),
++     
++     Condiciones_Trafico = fuzzy_partition(varnames = c(Desfavorable = 30, Normal = 55, Favorable = 80), 
++                                           FUN = fuzzy_cone, radius = 10)
++ )
+> 
+> #--------------------- Declaración de las reglas ----------------------------
+> 
+> rules <- set(
++  fuzzy_rule(Densidad_Trafico %is% Baja && Velocidad_Trafico %is% Rapida &&
++  Cantidad_Ruido %is% Moderado, Condiciones_Trafico %is% Favorable),
++ 
++  fuzzy_rule(Densidad_Trafico %is% Alta && Velocidad_Trafico %is% Lenta &&
++  Cantidad_Ruido %is% Ruidoso, Condiciones_Trafico %is% Desfavorable),
++ 
++  fuzzy_rule(Densidad_Trafico %is% Baja, Condiciones_Trafico %is% Favorable),
++  fuzzy_rule(Densidad_Trafico %is% Moderado || Velocidad_Trafico %is% Rapido ||
++  Cantidad_Ruido %is% Moderado, Condiciones_Trafico %is% Normal),
++ 
++  fuzzy_rule(Densidad_Trafico %is% Moderado && Cantidad_Ruido %is% Callada,
++  Condiciones_Trafico %is% Normal),
++ 
++  fuzzy_rule(Densidad_Trafico %is% Alta && Velocidad_Trafico %is% Rapida &&
++  Cantidad_Ruido %is% Moderado, Condiciones_Trafico %is% Normal)
++  )
+> 
+> #--------------------- Impresión del modelo --------------------------------
+> 
+> model <- fuzzy_system(variables, rules)
+> print(model)
+A fuzzy system consisting of 4 variables and 6 rules.
+
+Variables:
+
+Condiciones_Trafico(Desfavorable, Normal, Favorable)
+Velocidad_Trafico(Estacionario, Lento, Rapido)
+Densidad_Trafico(Baja, Moderado, Alta)
+Cantidad_Ruido(Callado, Moderado, Ruidoso)
+
+Rules:
+
+Densidad_Trafico %is% Moderado && Cantidad_Ruido %is% Callada => Condiciones_Trafico %is% Normal
+Densidad_Trafico %is% Alta && Velocidad_Trafico %is% Lenta &&  => Condiciones_Trafico %is% Desfavorable
+    Cantidad_Ruido %is% Ruidoso => Condiciones_Trafico %is% Desfavorable
+Densidad_Trafico %is% Alta && Velocidad_Trafico %is% Rapida &&  => Condiciones_Trafico %is% Normal
+    Cantidad_Ruido %is% Moderado => Condiciones_Trafico %is% Normal
+Densidad_Trafico %is% Baja && Velocidad_Trafico %is% Rapida &&  => Condiciones_Trafico %is% Favorable
+    Cantidad_Ruido %is% Moderado => Condiciones_Trafico %is% Favorable
+Densidad_Trafico %is% Moderado || Velocidad_Trafico %is% Rapido ||  => Condiciones_Trafico %is% Normal
+    Cantidad_Ruido %is% Moderado => Condiciones_Trafico %is% Normal
+Densidad_Trafico %is% Baja => Condiciones_Trafico %is% Favorable
+> plot(model)
+> #----------------------------------Creación de e1x-----------------------------
+> e1x <- fuzzy_inference(model, list(Densidad_Trafico = 50, Velocidad_Trafico = 5,
++                                    Cantidad_Ruido = 72))
+> gset_defuzzify(e1x, "centroid")
+[1] 67.51093
+> plot(e1x)
+> #-----------------------------------Creación de e2x-----------------------------
+> e2x <- fuzzy_inference(model, list(Densidad_Trafico = 120, Velocidad_Trafico = 2,
++                                    Cantidad_Ruido = 74))
+> gset_defuzzify(e2x, "centroid")
+[1] 55
+> plot(e2x)
+> #-----------------------------------Creación de e3x-----------------------------
+> e3x <- fuzzy_inference(model, list(Densidad_Trafico = 50, humedad = 5,
++                                    precipitacion = 72))
+> gset_defuzzify(e3x, "largestofmax")
+[1] NA
+> plot(e3x)

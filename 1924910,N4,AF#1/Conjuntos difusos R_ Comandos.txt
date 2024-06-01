@@ -1,0 +1,60 @@
+DataSetChistoso <- data.frame(sets = c(rep("A", 5), rep("B", 5)),
+  elements = c("1", "1.5", "2", "2.5", "3"),
+  fuzzy = c(1,0.75,0.3,0.15,1,1,0.6,0.8,1,0)
+  )
+ 
+ #Ahora hacer "tidy" el "DataSetChistoso"
+ DataSet_Tidy <- tidySet(DataSetChistoso)
+ DataSet_Tidy
+
+
+ #------------Operadores lógicos---------------
+ #Negación ------- ☁
+ A_Negado <- complement_set(DataSet_Tidy, sets = "A", keep = FALSE)
+ A_Negado
+ B_Negado <- complement_set(DataSet_Tidy, sets = "B", keep = FALSE)
+ B_Negado
+ 
+ #A unión B ------- ☁
+ A_Union_B <- BaseSet::union(DataSet_Tidy, sets = c("A", "B"))
+ A_Union_B
+
+# A interseccion B ------- ☁
+ A_Interseccion_B <- intersection(DataSet_Tidy, sets = c("A", "B"), keep = FALSE)
+ A_Interseccion_B
+
+# A interseccion B negada ------- ☁
+DataSetBNegada <- data.frame(sets = c(rep("A", 5), rep("B_Negada", 5)),
+  elements = c("1", "1.5", "2", "2.5", "3"),
+  fuzzy = c(1, 0.75, 0.3, 0.15, 1, 0, 0.4, 0.2, 0, 1)
+  )
+ DataSet_TidyBNegada <- tidySet(DataSetBNegada)
+  A_Interseccion_BNegada <- intersection(DataSet_TidyBNegada, sets = c("A", "B_Negada"), keep = FALSE)
+  A_Interseccion_BNegada
+
+# B interseccion A negada ------- ☁
+DataSetANegada <- data.frame(sets = c(rep("A_Negada", 5), rep("B", 5)),
+  elements = c("1", "1.5", "2", "2.5", "3"),
+  fuzzy = c(0,0.25,0.7,0.85,0,1,0.6,0.8,1,0)
+  )
+ DataSet_TidyANegada <- tidySet(DataSetANegada)
+  ANegada_Interseccion_B <- intersection(DataSet_TidyANegada, sets = c("A_Negada", "B"), keep = FALSE)
+  ANegada_Interseccion_B
+
+# A negada unión A ------- ☁
+DataSetANegadaA <- data.frame(sets = c(rep("A_Negada", 5), rep("A", 5)),
+  elements = c("1", "1.5", "2", "2.5", "3"),
+  fuzzy = c(0,0.25,0.7,0.85,0,1,0.75,0.3,0.15,1)
+  )
+ DataSet_TidyANegadaA <- tidySet(DataSetANegadaA)
+  ANegada_Union_A <- BaseSet::union(DataSet_TidyANegadaA, sets = c("A_Negada", "A"))
+  ANegada_Union_A
+
+# B negada interseccion B  ------- ☁
+DataSetBNegada <- data.frame(sets = c(rep("B_Negada", 5), rep("B", 5)),
+  elements = c("1", "1.5", "2", "2.5", "3"),
+  fuzzy = c(0,0.4,0.2,0,1,1,0.6,0.8,1,0)
+  )
+ DataSet_TidyBNegada <- tidySet(DataSetBNegada)
+  BNegada_Interseccion_B <- intersection(DataSet_TidyBNegada, sets = c("B_Negada", "B"), keep = FALSE)
+  BNegada_Interseccion_B

@@ -1,11 +1,10 @@
 library(stringr)
 library(ggplot2)
 
-
 #Estos datos no se cambian.
+#Pero si se cambian, el programa está preparado.
 Tamaño_Poblacion <- 8
 Tamaño_Individuo <- 8
-
 
 Generar_IndividuosAleatorios <- function(length) {
   individuo <- paste(sample(c(0, 1), length, replace = TRUE), collapse = "")
@@ -95,7 +94,6 @@ Evaluar_Mitad <- function(Mitad) {
       }
     }
     }
-
 
   #Y solo hasta que acabemos de contar a la mitad
   #Y no en cada nuevo bit contado...
@@ -274,7 +272,13 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
     Iteracion <- Iteracion + 1
   }
 
-  # Crear gráfica y guardarla en un objeto
+  max_calificacion <- max(Mejores_Calificaciones)
+  iteracion_max <- Puntuaciones_Iteraciones$Iteracion[which.max(Mejores_Calificaciones)]
+
+  cat("\n\n")
+  cat("La máxima calificación alcanzada fue: ", max_calificacion, " en la iteración: ", iteracion_max, "\n")
+
+
   grafica <- ggplot(Puntuaciones_Iteraciones, aes(x = Iteracion, y = Puntuacion)) +
     geom_line() +
     geom_point() +
@@ -292,7 +296,6 @@ Hacer_Todo <- function(Tamaño_Poblacion, Tamaño_Individuo, Limite_Iteraciones,
 #Estos datos no se cambian.
 Tamaño_Poblacion <- Tamaño_Poblacion
 Tamaño_Individuo <- Tamaño_Individuo
-
 #Estos datos sí se pueden cambiar para hacer pruebas.
 Limite_Iteraciones <- 100
 Limite_Iteraciones_NoMejora <- 10
